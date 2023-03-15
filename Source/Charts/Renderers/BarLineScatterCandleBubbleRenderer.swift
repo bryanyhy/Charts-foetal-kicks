@@ -65,7 +65,12 @@ open class BarLineScatterCandleBubbleRenderer: NSObject, DataRenderer
 
     open func isDrawingValuesAllowed(dataProvider: ChartDataProvider?) -> Bool
     {
-        guard let data = dataProvider?.data else { return false }
+      let value = CGFloat(dataProvider?.maxVisibleCount ?? 0)
+      guard let data = dataProvider?.data,
+              !viewPortHandler.scaleX.isNaN,
+              !viewPortHandler.scaleX.isInfinite,
+              !value.isNaN,
+              !value.isInfinite else { return false }
         return data.entryCount < Int(CGFloat(dataProvider?.maxVisibleCount ?? 0) * viewPortHandler.scaleX)
     }
 
